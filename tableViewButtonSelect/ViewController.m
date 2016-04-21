@@ -22,6 +22,11 @@
     _tableView.delegate=self;
     _tableView.dataSource=self;
     [self.view addSubview:_tableView];
+    
+    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:self.indexRow inSection:0];
+    
+    [self tableView:self.tableView didSelectRowAtIndexPath:indexPath];
+    
     // Do any additional setup after loading the view, typically from a nib.
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -41,25 +46,13 @@
     cell.textLabel.text=@"测试数据";
     cell.choose =[UIButton buttonWithType:UIButtonTypeCustom];
     cell.choose.frame=CGRectMake(self.view.frame.size.width-30, 20, 20, 20);
-    [cell.choose setImage:[UIImage imageNamed:@"shoppingnormal"] forState:UIControlStateNormal];
-    [cell.choose setImage:[UIImage imageNamed:@"shoppingSelected"] forState:UIControlStateSelected];
     [cell.choose addTarget:self action:@selector(choosePressed:) forControlEvents:UIControlEventTouchUpInside];
-    isSelectButton=YES;
-    
-//    
-//    if (self.indexRow == indexPath.row) {
-//  
-////        cell.choose setImage:<#(nullable UIImage *)#> forState:<#(UIControlState)#>
-//        
-//    }else{
-//    
-//        [cell.choose setImage:[UIImage imageNamed:@"shoppingnormal"] forState:UIControlStateNormal];
-//
-//
-//    
-//    }
-    
-    
+    cell.choose.tag=indexPath.row;
+    if (self.indexRow == indexPath.row) {
+        [cell.choose setImage:[UIImage imageNamed:@"shoppingSelected"] forState:UIControlStateNormal];
+    }else{
+        [cell.choose setImage:[UIImage imageNamed:@"shoppingnormal"] forState:UIControlStateNormal];
+    }
     [cell.contentView addSubview:cell.choose];
     
     return cell;
@@ -67,40 +60,15 @@
 }
 
 -(void)choosePressed:(UIButton *)sender{
-    if (isSelectButton) {
-        sender.selected =!sender.selected;
-    }else {
-    
-        NSLog(@"未选中");
-    
-    }
+ 
+    self.indexRow=sender.tag;
+    [self.tableView reloadData];
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-   
-    
-//    if (self.indexRow == indexPath.row) {
-//        return;
-//    }
-//    self.indexRow=indexPath.row;
-//
-//   
-    if (indexPath.row==self.indexRow) {
-        return;
-    }
-    
-    NSIndexPath *oldIndexPath=[NSIndexPath indexPathForRow:self.indexRow inSection:0];
-
-    TableCell *newCell=[self.tableView cellForRowAtIndexPath:oldIndexPath];
-    if(isSelectButton){
-        [newCell.choose setImage:[UIImage imageNamed:@"shoppingSelected"] forState:UIControlStateSelected];
-
-    }else{
-    [newCell.choose setImage:[UIImage imageNamed:@"shoppingnormal"] forState:UIControlStateSelected];
-    
-    }
+    self.indexRow = indexPath.row;
+    [self.tableView reloadData];
     
   
 }

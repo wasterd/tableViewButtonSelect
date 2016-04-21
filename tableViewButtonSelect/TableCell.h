@@ -10,8 +10,5 @@
 
 @interface TableCell : UITableViewCell
 @property(nonatomic, strong)UIButton *choose;
-@property(nonatomic, assign)NSInteger Id;
-@property(nonatomic, copy)void (^choosBlock)(NSInteger index);
-@property(nonatomic, assign)BOOL didSetUpdateContants;
--(void)setChecked:(BOOL)checked;
+
 @end
